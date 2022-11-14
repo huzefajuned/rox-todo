@@ -4,8 +4,15 @@ import axios from "axios";
 import styles from "../Todos/Todos.module.css";
 import { TiTick } from "react-icons/ti";
 import ViewTodo from "../ViewTodo/ViewTodo";
+import Loading from "../Loading/Loading";
 
 const Todos = () => {
+  //preloader
+  const [loading, setLoading] = useState(false);
+  setTimeout(() => {
+    setLoading(true);
+  }, 1900);
+
   const [current, setCurrent] = useState({});
   const [id, setId] = useState();
   const [title, setTitle] = useState();
@@ -50,52 +57,62 @@ const Todos = () => {
   }, [id]);
 
   return (
-    <div className={styles.container}>
-      <div className={styles.left_Container}>
-        <div className={styles.headings}>
-          <p>Todo ID</p>
-          <p>Title</p>
-          <p>Status</p>
-          <p>Action</p>
-        </div>
-        <div className={styles.main_Card}>
-          {apiData?.map((data, i) => {
-            const { id, title, completed } = data;
-            // console.log(data);
-            return (
-              <>
-                <div className={styles.card}>
-                  <h3>{id}</h3>
-                  <h3>{title}</h3>
-                  {/* <TiTick /> */}
-                  <h3>{completed == true ? "completd" : "incompleted"} </h3>
-                  <div className={styles.viewBtn}>
-                    <button onClick={() => onPopup(id, title)}>
-                      View Todo
-                    </button>
-                  </div>
-                </div>
-              </>
-            );
-          })}
-        </div>
-      </div>
-
-      <div className={styles.right_Container}>
-        {isTrue == 1 ? (
-          <>
-            <ViewTodo
-              current={current}
-              title={title}
-              isTrue={isTrue}
-              setIsTrue={setIsTrue}
-            />
-          </>
-        ) : (
-          ""
-        )}
-      </div>
-    </div>
+    <>
+      {loading == true ? (
+        <>
+          <div className={styles.container}>
+            <div className={styles.left_Container}>
+              <div className={styles.headings}>
+                <p>Todo ID</p>
+                <p>Title</p>
+                <p>Status</p>
+                <p>Action</p>
+              </div>
+              <div className={styles.main_Card}>
+                {apiData?.map((data, i) => {
+                  const { id, title, completed } = data;
+                  // console.log(data);
+                  return (
+                    <>
+                      <div className={styles.card}>
+                        <h3>{id}</h3>
+                        <h3>{title}</h3>
+                        {/* <TiTick /> */}
+                        <h3>
+                          {completed == true ? "completd" : "incompleted"}{" "}
+                        </h3>
+                        <div className={styles.viewBtn}>
+                          <button onClick={() => onPopup(id, title)}>
+                            View Todo
+                          </button>
+                        </div>
+                      </div>
+                    </>
+                  );
+                })}
+              </div>
+            </div>
+            <div className={styles.right_Container}>
+              {isTrue == 1 ? (
+                <>
+                  <ViewTodo
+                    current={current}
+                    title={title}
+                    isTrue={isTrue}
+                    setIsTrue={setIsTrue}
+                  />
+                </>
+              ) : (
+                ""
+              )}
+            </div>
+          </div>
+        </>
+      ) : (
+        <Loading />
+      )}
+      s
+    </>
   );
 };
 
